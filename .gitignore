@@ -1,6 +1,6 @@
 *.sublime*
 *.pyc
-db.sqlite
+db.sqlite3
 *.jpg
 *.JPG
 *.png
