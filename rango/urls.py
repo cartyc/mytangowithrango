@@ -4,4 +4,7 @@ from rango import views
 urlpatterns = patterns('',
 	url(r'^$', views.index, name='index'),
 	url(r'^about/', views.about, name='about'),
+	# ?P for parameter
+	# [\w\-]+ Will find any Char followed by a - before a /
+	url(r'^category/(?P<category_name_slug>[\w\-]+)/$', views.category, name='category'),
 	)

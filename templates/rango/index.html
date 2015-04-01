@@ -1,11 +1,35 @@
 <!DOCTYPE html>
+
+{% load staticfiles %}
+
 <html>
 	<head>
 		<title>Rango</title>
+		<link rel="stylesheet" href="{% static "css/base.css" %}" />
 	</head>
 	<body>
-		<h1>Rango says...</h1>
-		hello world! <strong>{{ boldmessage }}</strong><br />
-		<a href="/rango/about/">About</a><br />
+		<h1>Rango says...Hello world!</h1>
+
+		<h2>Most Like</h2>
+		{% if categories %}
+			<ul>
+				{% for category in categories %}
+					<li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<strong>There are no categories present.</strong>
+		{% endif %}
+
+		<h2>Most Viewed</h2>
+		{% if most_viewed %}
+			<ul>
+			{% for category in most_viewed %}
+				<li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+
+		<a href="about">About</a>
 	</body>
 </html>
