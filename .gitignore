@@ -2,4 +2,6 @@
 *.pyc
 db.sqlite
 *.jpg
+*.JPG
 *.png
+*.PNG
