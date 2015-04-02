@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from rango.models import Category, Page
-from rango.forms import CategoryForm
+from rango.forms import CategoryForms
 
 #Category Form
 
@@ -10,7 +10,7 @@ def add_category(request):
 
 	# Is it a post?
 	if request.method == 'POST':
-		form = CategoryForm(request.POST)
+		form = CategoryForms(request.POST)
 
 		#Check form validity
 		if form.is_valid():
@@ -25,7 +25,7 @@ def add_category(request):
 			print form.errors
 
 	else:
-		form = CatgoryForm()
+		form = CategoryForms()
 
 	return render(request, 'rango/add_category.html', {'form':form})
 
