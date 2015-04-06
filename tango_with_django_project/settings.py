@@ -93,7 +93,7 @@ STATICFILES_DIRS = (
     STATIC_PATH,
     )
 
-
+LOGIN_URL = "/rango/login"
 
 #Media Files for uploads
 MEDIA_URL = '/media/'
