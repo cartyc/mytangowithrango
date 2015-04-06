@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 
-from rango.models import Category, Page
-from rango.forms import CategoryForms, PageForms
+from rango.models import Category, Page, userProfile
+from rango.forms import CategoryForms, PageForms, UserForms, UserProfileForms
 
 #Category Form
 
@@ -98,3 +99,55 @@ def category(request, category_name_slug):
 
 	#Render it up
 	return render(request, 'rango/category.html', context_dict)
+
+
+
+def register(request):
+
+	#Make sure form starts off with an the user being unregistered. 
+	#This will change upon upon registration success
+
+	registered = False
+
+	if request.method == "POST":
+
+		user_form = UserForms(data=request.POST)
+		profile_form = UserProfileForms(data=request.POST)
+
+		if user_form.is_valid() and profile_form.is_valid():
+
+			#Handle the user
+			user = user_form.save()
+			user.set_password(user.password)
+			user.save()
+
+			#Handle the Users Profile
+			profile = profile_form.save(commit=False)
+			profile.user = user
+
+			#Is there profile pic to be handled?
+			if 'picture' in request.FILES:
+				profile.picture = request.FILES['picture']
+
+			profile.save()
+
+			registered = True
+
+		else:
+
+			print user_form.errors, profile_form.errors
+
+	else:
+
+		user_form = UserForms()
+		profile_form = UserProfileForms()
+
+	return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered':registered})
+
+
+def user_login(request):
+
+	#If POST
+	if request.method == "POST":
+
+		
