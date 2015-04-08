@@ -1,13 +1,9 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 
 {% load staticfiles %}
 
-<html>
-	<head>
-		<title>Rango</title>
-		<link rel="stylesheet" href="{% static "css/base.css" %}" />
-	</head>
-	<body>
+{% block body_block %}
+
 		{% if user.is_authenticated %}
 			<h1>Rango says...Hello {{ user.username }}</h1>
 		{% else %}
@@ -18,7 +14,7 @@
 		{% if categories %}
 			<ul>
 				{% for category in categories %}
-					<li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
+					<li><a href="{% url 'category' category.slug %}">{{ category.name }}</a></li>
 				{% endfor %}
 			</ul>
 		{% else %}
@@ -43,5 +39,5 @@
 			<a href="/rango/register/">Register Here</a><br />
 			<a href="/rango/login/">Login</a><br />
 		{% endif %}
-	</body>
-</html>
+
+{% endblock %}
