@@ -141,86 +141,86 @@ def category(request, category_name_slug):
 
 
 
-def register(request):
+# def register(request):
 
-	#Make sure form starts off with an the user being unregistered. 
-	#This will change upon upon registration success
-    if request.session.test_cookie_worked():
-        print "Cookie worked!"
-        request.session.delete_test_cookie()
+# 	#Make sure form starts off with an the user being unregistered. 
+# 	#This will change upon upon registration success
+#     if request.session.test_cookie_worked():
+#         print "Cookie worked!"
+#         request.session.delete_test_cookie()
 
-	registered = False
+# 	registered = False
 
-	if request.method == "POST":
+# 	if request.method == "POST":
 
-		user_form = UserForms(data=request.POST)
-		profile_form = UserProfileForms(data=request.POST)
+# 		user_form = UserForms(data=request.POST)
+# 		profile_form = UserProfileForms(data=request.POST)
 
-		if user_form.is_valid() and profile_form.is_valid():
+# 		if user_form.is_valid() and profile_form.is_valid():
 
-			#Handle the user
-			user = user_form.save()
-			user.set_password(user.password)
-			user.save()
+# 			#Handle the user
+# 			user = user_form.save()
+# 			user.set_password(user.password)
+# 			user.save()
 
-			#Handle the Users Profile
-			profile = profile_form.save(commit=False)
-			profile.user = user
+# 			#Handle the Users Profile
+# 			profile = profile_form.save(commit=False)
+# 			profile.user = user
 
-			#Is there profile pic to be handled?
-			if 'picture' in request.FILES:
-				profile.picture = request.FILES['picture']
+# 			#Is there profile pic to be handled?
+# 			if 'picture' in request.FILES:
+# 				profile.picture = request.FILES['picture']
 
-			profile.save()
+# 			profile.save()
 
-			registered = True
+# 			registered = True
 
-		else:
+# 		else:
 
-			print user_form.errors, profile_form.errors
+# 			print user_form.errors, profile_form.errors
 
-	else:
+# 	else:
 
-		user_form = UserForms()
-		profile_form = UserProfileForms()
+# 		user_form = UserForms()
+# 		profile_form = UserProfileForms()
 
-	return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered':registered})
-
-
-def user_login(request):
-
-	#If POST
-	if request.method == "POST":
-
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-
-		user = authenticate(username=username, password=password)
-
-		#If user authenticates
-		if user:
-
-			if user.is_active:
-
-				#If user is valid and active
-				login(request, user)
-				return HttpResponseRedirect('/rango/')
-
-			else:
-
-				#if not active
-				return HttpResponse('Your Rango account was disabled')
-
-		else:
-
-			print "Invalid Login Details: {0}, {1}".format(username, password)
-			return HttpResponse("invalid login details supplied")
+# 	return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered':registered})
 
 
-	else:
+# def user_login(request):
 
-		#If fresh form
-		return render(request, 'rango/login.html', {})
+# 	#If POST
+# 	if request.method == "POST":
+
+# 		username = request.POST.get('username')
+# 		password = request.POST.get('password')
+
+# 		user = authenticate(username=username, password=password)
+
+# 		#If user authenticates
+# 		if user:
+
+# 			if user.is_active:
+
+# 				#If user is valid and active
+# 				login(request, user)
+# 				return HttpResponseRedirect('/rango/')
+
+# 			else:
+
+# 				#if not active
+# 				return HttpResponse('Your Rango account was disabled')
+
+# 		else:
+
+# 			print "Invalid Login Details: {0}, {1}".format(username, password)
+# 			return HttpResponse("invalid login details supplied")
+
+
+# 	else:
+
+# 		#If fresh form
+# 		return render(request, 'rango/login.html', {})
 
 
 @login_required
@@ -228,9 +228,9 @@ def restricted(request):
 
 	return HttpResponse("Since you're logged in, you can see this text")
 
-@login_required
-def user_logout(request):
+# @login_required
+# def user_logout(request):
 
-	logout(request)
+# 	logout(request)
 
-	return HttpResponseRedirect('/rango')
+# 	return HttpResponseRedirect('/rango')

@@ -27,6 +27,13 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 
+#Registration Settings
+REGISTRATION_OPEN = True        #If True, users can register
+ACCOUNT_ACTIVATION_DAYS = 7     #One-Week activation window
+REGISTRATION_AUTO_LOGIN = True  #If True, users will be logged in automatically
+LOGIN_REDIRECT_URL = '/rango'   #Landing Page
+LOGIN_URL = '/accounts/login/'   #Registration URL
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -37,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rango',
+    'registration', ##this package gives more tools for handling user registration.
 )
 
 MIDDLEWARE_CLASSES = (
