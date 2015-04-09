@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from rango.models import Category, Page, userProfile
 from rango.forms import CategoryForms, PageForms, UserForms, UserProfileForms
 
-#Category Form
+#Other
+from datetime import datetime
 
 def add_category(request):
 
@@ -68,7 +69,7 @@ def add_page(request, category_name_slug):
 # Create your views here.
 def index(request):
 
-    request.session.set_test_cookie()
+    visits = int(request.COOKIES.get("visits", "1"))
 
     #Define merge fields in a dictionary
     category_list = Category.objects.order_by('-likes')[:5]
@@ -77,8 +78,31 @@ def index(request):
     context_dict = {'categories': category_list,
 				'most_viewed': most_viewed}
 
+    reset_last_visit_time = False
+    response = render(request, 'rango/index.html', context_dict)
+    if 'last_visit' in request.COOKIES:
+        last_visit = request.COOKIES['last_visit']
+        #cast value to date time
+        print last_visit
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+
+        if (datetime.now() - last_visit_time).days > 0:
+            visits += 1
+            reset_last_visit_time = True
+
+    else:
+
+        #Last visit doesn't exist so set it
+        reset_last_visit_time = True
+        context_dict['visits'] = visits
+        response = render(request, 'rango/index.html', context_dict)
+
+    if reset_last_visit_time:
+        response.set_cookie('last_visit', datetime.now())
+        response.set_cookie('visits', visits)
+
     #Pass all the data into the render.
-    return render(request, 'rango/index.html', context_dict)
+    return response
 
 def about(request):
 	link = '<a href="/rango">Home</a>'
