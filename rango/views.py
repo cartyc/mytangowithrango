@@ -67,15 +67,18 @@ def add_page(request, category_name_slug):
 
 # Create your views here.
 def index(request):
-	#Define merge fields in a dictionary
-	category_list = Category.objects.order_by('-likes')[:5]
-	most_viewed = Category.objects.order_by('-views')[:5]
 
-	context_dict = {'categories': category_list,
+    request.session.set_test_cookie()
+
+    #Define merge fields in a dictionary
+    category_list = Category.objects.order_by('-likes')[:5]
+    most_viewed = Category.objects.order_by('-views')[:5]
+
+    context_dict = {'categories': category_list,
 				'most_viewed': most_viewed}
 
-	#Pass all the data into the render.
-	return render(request, 'rango/index.html', context_dict)
+    #Pass all the data into the render.
+    return render(request, 'rango/index.html', context_dict)
 
 def about(request):
 	link = '<a href="/rango">Home</a>'
@@ -110,6 +113,9 @@ def register(request):
 
 	#Make sure form starts off with an the user being unregistered. 
 	#This will change upon upon registration success
+    if request.session.test_cookie_worked():
+        print "Cookie worked!"
+        request.session.delete_test_cookie()
 
 	registered = False
 
