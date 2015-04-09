@@ -5,3 +5,4 @@ db.sqlite3
 *.JPG
 *.png
 *.PNG
+.idea/*
