@@ -69,8 +69,6 @@ def add_page(request, category_name_slug):
 # Create your views here.
 def index(request):
 
-    visits = int(request.COOKIES.get("visits", "1"))
-
     #Define merge fields in a dictionary
     category_list = Category.objects.order_by('-likes')[:5]
     most_viewed = Category.objects.order_by('-views')[:5]
@@ -78,8 +76,15 @@ def index(request):
     context_dict = {'categories': category_list,
 				'most_viewed': most_viewed}
 
+    visits = request.session.get("visits")
+    if not visits:
+        visits = 1
     reset_last_visit_time = False
+
+    last_visit = request.session.get('last_visit')
+
     response = render(request, 'rango/index.html', context_dict)
+    last_visit = request.session.get('last_visit')
     if 'last_visit' in request.COOKIES:
         last_visit = request.COOKIES['last_visit']
         #cast value to date time
@@ -87,7 +92,7 @@ def index(request):
         last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
 
         if (datetime.now() - last_visit_time).days > 0:
-            visits += 1
+            visits = visits + 1
             reset_last_visit_time = True
 
     else:
