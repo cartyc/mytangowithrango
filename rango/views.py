@@ -73,22 +73,18 @@ def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
     most_viewed = Category.objects.order_by('-views')[:5]
 
-    context_dict = {'categories': category_list,
-				'most_viewed': most_viewed}
+    context_dict = {'categories': category_list,'most_viewed': most_viewed}
 
     visits = request.session.get("visits")
     if not visits:
         visits = 1
+
     reset_last_visit_time = False
 
     last_visit = request.session.get('last_visit')
+    if last_visit:
 
-    response = render(request, 'rango/index.html', context_dict)
-    last_visit = request.session.get('last_visit')
-    if 'last_visit' in request.COOKIES:
-        last_visit = request.COOKIES['last_visit']
         #cast value to date time
-        print last_visit
         last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
 
         if (datetime.now() - last_visit_time).days > 0:
@@ -99,28 +95,36 @@ def index(request):
 
         #Last visit doesn't exist so set it
         reset_last_visit_time = True
-        context_dict['visits'] = visits
-        response = render(request, 'rango/index.html', context_dict)
 
     if reset_last_visit_time:
-        response.set_cookie('last_visit', datetime.now())
-        response.set_cookie('visits', visits)
+        request.session['last_visit'] = str(datetime.now())
+        request.session['visits'] = visits
 
+    context_dict['visits'] = visits
+    response = render(request, 'rango/index.html', context_dict)
     #Pass all the data into the render.
     return response
 
 def about(request):
 	link = '<a href="/rango">Home</a>'
-	return render(request, 'rango/about.html')
+	
+	if request.session.get('visits'):
+		visits = request.session.get('visits')
+	else:
+		visits = 0
+
+	context_dict = {'visits': visits}
+
+	return render(request, 'rango/about.html', context_dict)
 
 
 def category(request, category_name_slug):
 
-	#Create a blank dict for the rendering engine
+    #Create a blank dict for the rendering engine
 	context_dict = {}
 
 	try:
-		#find the category that matches the slug url
+        #find the category that matches the slug url
 		category = Category.objects.get(slug=category_name_slug)
 		context_dict['category_name'] = category.name
 		print category
@@ -130,9 +134,8 @@ def category(request, category_name_slug):
 		context_dict['category'] = category
 
 	except Category.DoesNotExist:
-		#If nothing is found
+        #If nothing is found
 		pass
-
 	#Render it up
 	return render(request, 'rango/category.html', context_dict)
 
