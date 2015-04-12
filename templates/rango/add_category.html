@@ -1,27 +1,19 @@
 {% extends 'base.html' %}
+{% load bootstrap_toolkit %}
 {% block title %}Add Category{% endblock %}
 
 {% block body_block %}
 
 
 		<!-- Build the form -->
-		{% if category %}
+
 			<form role="form" id="category_form" method="post" action="/rango/add_category/">
 			<h2 class="form-signin-heading">Add a Category</h2>
 				{% csrf_token %}
-				{% for hidden in form.hidden_fields %}
-					{{ hidden }}
-				{% endfor %}
 
-				{% for field in form.visible_fields %}
-					{{ field.errors }}
-					{{ field.help_text }}
-					{{ field }}
-				{% endfor %}
+				{{ form|as_bootstrap }}
+				<br/>
 				<button class="btn btn-primary" type="submit" name="submit">Add Category</button>
 			</form>
-		{% else %}
-			<p>Category does not Exist/</p>
-		{% endif %}
 
 {% endblock %}
