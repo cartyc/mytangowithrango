@@ -19,4 +19,4 @@ def run_query(search_terms):
 	query = urllib.quote(query)
 
 	#Format backhalf of Url and set jSON formatting
-	
+	search_url = "{0}{1}?$format=json$top={2}&$skip={3}&"
