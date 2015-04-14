@@ -6,8 +6,8 @@
 					<li class="active">
 				{% else %}
 					<li>
-				<li><a href="{% url 'category' cat.slug %}">{{ cat.name }}</a></li>
-				}
+				{% endif %}
+				<a href="{% url 'category' cat.slug %}">{{ cat.name }}</a></li>
 			{% endfor %}
 	{% else %}
 		<li><strong>There are no categories present</strong></li>
