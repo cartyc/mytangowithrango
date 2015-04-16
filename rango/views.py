@@ -124,19 +124,31 @@ def category(request, category_name_slug):
     #Create a blank dict for the rendering engine
 	context_dict = {}
 
-	try:
-        #find the category that matches the slug url
-		category = Category.objects.get(slug=category_name_slug)
-		context_dict['category_name'] = category.name
-		print category
-		pages = Page.objects.filter(category=category)
+	if request.method == 'POST':
+		query = request.POST['query'].strip()
 
-		context_dict['pages'] = pages
-		context_dict['category'] = category
+		if query:
 
-	except Category.DoesNotExist:
-        #If nothing is found
-		pass
+			#run the bing search function
+			result_list = run_query(query)
+
+		return render(request, 'rango/search.html', {'result_list': result_list})
+
+	else:
+
+		try:
+	        #find the category that matches the slug url
+			category = Category.objects.get(slug=category_name_slug)
+			context_dict['category_name'] = category.name
+			print category
+			pages = Page.objects.filter(category=category)
+
+			context_dict['pages'] = pages
+			context_dict['category'] = category
+
+		except Category.DoesNotExist:
+	        #If nothing is found
+			pass
 	#Render it up
 	return render(request, 'rango/category.html', context_dict)
 

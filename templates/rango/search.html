@@ -13,12 +13,15 @@
 	<div class="row">
 		<div class="panel panel-primary">
 			<br />
-			<form class="form-inline" id="user_form" method="post" action="{% url 'search' %}">
-				{% csrf_token %}
-				<input class="form-control" type="text" size="50" name="query" value="" id="query" />
-				<input class="btn btn-primary" type="submit" name="submit" value="Search" />
-				<br />
-			</form>
+
+			{% if user.authenticated %}
+				<form class="form-inline" id="user_form" method="post" action="{% url 'search' %}">
+					{% csrf_token %}
+					<input class="form-control" type="text" size="50" name="query" value="" id="query" />
+					<input class="btn btn-primary" type="submit" name="submit" value="Search" />
+					<br />
+				</form>
+			{% endif %}
 
 			<div class="panel">
 			{% if result_list %}
