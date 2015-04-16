@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 #User Auth Stuff
 from django.contrib.auth.models import User
@@ -142,86 +142,6 @@ def category(request, category_name_slug):
 
 
 
-# def register(request):
-
-# 	#Make sure form starts off with an the user being unregistered. 
-# 	#This will change upon upon registration success
-#     if request.session.test_cookie_worked():
-#         print "Cookie worked!"
-#         request.session.delete_test_cookie()
-
-# 	registered = False
-
-# 	if request.method == "POST":
-
-# 		user_form = UserForms(data=request.POST)
-# 		profile_form = UserProfileForms(data=request.POST)
-
-# 		if user_form.is_valid() and profile_form.is_valid():
-
-# 			#Handle the user
-# 			user = user_form.save()
-# 			user.set_password(user.password)
-# 			user.save()
-
-# 			#Handle the Users Profile
-# 			profile = profile_form.save(commit=False)
-# 			profile.user = user
-
-# 			#Is there profile pic to be handled?
-# 			if 'picture' in request.FILES:
-# 				profile.picture = request.FILES['picture']
-
-# 			profile.save()
-
-# 			registered = True
-
-# 		else:
-
-# 			print user_form.errors, profile_form.errors
-
-# 	else:
-
-# 		user_form = UserForms()
-# 		profile_form = UserProfileForms()
-
-# 	return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered':registered})
-
-
-# def user_login(request):
-
-# 	#If POST
-# 	if request.method == "POST":
-
-# 		username = request.POST.get('username')
-# 		password = request.POST.get('password')
-
-# 		user = authenticate(username=username, password=password)
-
-# 		#If user authenticates
-# 		if user:
-
-# 			if user.is_active:
-
-# 				#If user is valid and active
-# 				login(request, user)
-# 				return HttpResponseRedirect('/rango/')
-
-# 			else:
-
-# 				#if not active
-# 				return HttpResponse('Your Rango account was disabled')
-
-# 		else:
-
-# 			print "Invalid Login Details: {0}, {1}".format(username, password)
-# 			return HttpResponse("invalid login details supplied")
-
-
-# 	else:
-
-# 		#If fresh form
-# 		return render(request, 'rango/login.html', {})
 
 
 @login_required
@@ -229,13 +149,9 @@ def restricted(request):
 
 	return HttpResponse("Since you're logged in, you can see this text")
 
-# @login_required
-# def user_logout(request):
 
-# 	logout(request)
 
-# 	return HttpResponseRedirect('/rango')
-
+# Process the search request
 def search(request):
 
 	result_list = []
@@ -249,3 +165,30 @@ def search(request):
 			result_list = run_query(query)
 
 	return render(request, 'rango/search.html', {'result_list': result_list})
+
+
+# Perform click tracking
+
+def track_url(request):
+
+	if request.method == "GET":
+		if 'pageid' in request.GET:
+			page_id = request.GET['pageid']
+
+			page = Page.objects.get(id=page_id)
+			print "object"	
+			print page
+			currentCount = page.views
+			url = page.url
+			print url
+			newCount = currentCount + 1
+
+			page.views = newCount
+
+			page.save()
+
+
+
+
+	return redirect(url)
+
