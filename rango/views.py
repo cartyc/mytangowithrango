@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 #Model
 from rango.models import Category, Page, userProfile
 from rango.forms import CategoryForms, PageForms, UserForms, UserProfileForms
+from rango.bing_search import run_query
 
 #Other
 from datetime import datetime
@@ -234,3 +235,17 @@ def restricted(request):
 # 	logout(request)
 
 # 	return HttpResponseRedirect('/rango')
+
+def search(request):
+
+	result_list = []
+
+	if request.method == 'POST':
+		query = request.POST['query'].strip()
+
+		if query:
+
+			#run the bing search function
+			result_list = run_query(query)
+
+	return render(request, 'rango/search.html', {'result_list': result_list})
