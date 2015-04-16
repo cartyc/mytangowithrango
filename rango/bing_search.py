@@ -2,8 +2,8 @@ import json
 import urllib, urllib2
 
 #Bing API Key
+from keys import BING_API_KEY
 
-BING_API_KEY = "deHx/9yPwgMh5rdnW4WQXjwWnD5vrQtFlYJfNA9xF+k"
 
 def run_query(search_terms):
 
