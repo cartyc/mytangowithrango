@@ -1,4 +1,4 @@
-import json
+import json, sys
 import urllib, urllib2
 
 #Bing API Key
@@ -8,8 +8,8 @@ from keys import BING_API_KEY
 def run_query(search_terms):
 
 	root_url = 'https://api.datamarket.azure.com/Bing/Search/'
-	source = "web"
-
+	source = "Web"
+	# print BING_API_KEY
 	# Results Return
 	results_per_page = 10
 	offset = 0
@@ -19,7 +19,7 @@ def run_query(search_terms):
 	query = urllib.quote(query)
 
 	#Format backhalf of Url and set jSON formatting
-	search_url = "{0}{1}?$format=json$top={2}&$skip={3}&$Query={4}".format(
+	search_url = "{0}{1}?$format=json&$top={2}&$skip={3}&Query={4}".format(
 			root_url,
 			source,
 			results_per_page,
@@ -33,12 +33,12 @@ def run_query(search_terms):
 	password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
 	password_mgr.add_password(None, search_url, username, BING_API_KEY)
 
-	result = []
+	results = []
 
 	try:
 		#Prepare API Communication
 		handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-		opener = urllib2.builder_opener(handler)
+		opener = urllib2.build_opener(handler)
 
 		urllib2.install_opener(opener)
 
@@ -50,12 +50,24 @@ def run_query(search_terms):
 		#Loop through each page returned and populate results
 		for result in json_response['d']['results']:
 			results.append({
-				'title': result['title'],
+				'title': result['Title'],
 				'link' : result['Url'],
 				'summary' : result['Description']
 				})
-	except urllib2.URlError, e:
+	except urllib2.URLError, e:
 		print "Error connecting to the bing API"
 
 	#return the results
 	return results
+
+def main():
+	search = str(sys.argv)
+
+	results = run_query(search)
+
+	print results
+
+
+if __name__ == '__main__':
+
+	main()
