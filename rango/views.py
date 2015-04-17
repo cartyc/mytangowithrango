@@ -217,7 +217,7 @@ def register_profile(request):
 		print user
 		form = UserProfileForms(request.POST)
 
-		if form.is_valid:
+		if form.is_valid():
 
 			profile = form.save(commit=False)
 
@@ -239,3 +239,48 @@ def register_profile(request):
 			context['form'] = form
 
 	return render( request, 'rango/profile_registration.html', context)
+
+@login_required
+def profile(request):
+
+	user = request.user
+	if user.is_authenticated:
+
+		
+		context = {}
+
+		if request.method == "GET":
+			getUser = userProfile.objects.get(user=user)
+		
+
+			getUser = userProfile.objects.get(user=user)
+
+			form = UserProfileForms(instance=getUser)
+			context['form'] = form
+
+		elif request.method == "POST":
+
+
+			# Update the user profile
+			instance = userProfile.objects.get(user=user)
+			form = UserProfileForms(request.POST, instance = instance)
+
+			if form.is_valid():
+				print "is Valid"
+				
+				profile = form.save(commit=False)
+
+				profile.user = user
+
+				profile.save()
+
+				context['form'] = form				
+			else:
+
+				print "Is Not Valid"
+
+	else:
+
+		context = {}
+
+	return render( request, 'rango/profile.html', context)

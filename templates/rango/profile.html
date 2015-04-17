@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load bootstrap_toolkit %}
+
+{% block title %}Add Profile {% endblock %}
+
+{% block body_block %}
+
+
+	{% if user.is_authenticated %}
+		<form role="form" id="category_form" method="post" action="/rango/profile/">
+			<h2 class="form-signin-heading">Edit Your Profile</h2>
+			{% csrf_token %}
+
+			{{ form|as_bootstrap }}
+			<br/>
+		<button class="btn btn-primary" type="submit" name="submit">Update Profile</button>
+
+	{% else %}
+
+		<p>Not registered</p>
+
+	{% endif %}
+
+{% endblock %}
+
