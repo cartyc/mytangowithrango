@@ -204,3 +204,19 @@ def track_url(request):
 
 	return redirect(url)
 
+
+def register_profile(request):
+
+	context = {}
+
+	if request.method == "POST":
+
+		#Add user
+		print "test"
+
+	else:
+
+		form = UserProfileForms()
+		context['form'] = form
+
+	return render( request, 'rango/profile_registration.html', context)
