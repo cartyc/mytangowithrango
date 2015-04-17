@@ -204,7 +204,7 @@ def track_url(request):
 
 	return redirect(url)
 
-
+@login_required
 def register_profile(request):
 
 	context = {}
