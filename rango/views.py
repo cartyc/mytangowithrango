@@ -211,12 +211,31 @@ def register_profile(request):
 
 	if request.method == "POST":
 
-		#Add user
+		userID = request.user.id
+		user = User.objects.get(id=userID)
+
+		print user
+		form = UserProfileForms(request.POST)
+
+		if form.is_valid:
+
+			profile = form.save(commit=False)
+
+			profile.user = user
+
+			profile.save()
+
+			return redirect('/rango')
+			
+
+
 		print "test"
 
 	else:
 
-		form = UserProfileForms()
-		context['form'] = form
+		if request.user.is_authenticated:
+
+			form = UserProfileForms()
+			context['form'] = form
 
 	return render( request, 'rango/profile_registration.html', context)
