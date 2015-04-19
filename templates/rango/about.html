@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load bootstrap_toolkit %}
+
 
 {% block title %}About{% endblock %}
 
 {% block body_block %}
 	
 	<div class="page-header"><h1>About</h1></div>
+	<button id="about-btn">
+		Cick Me! I'm javascript on speed!
+	</button>
+	<p>This is an example</p>
+	<p>This is another example</p>
+	<div id="msg">Hello</div>
 	<div><p></strong>.</p>
 
 	Visits: {{ visits }}
