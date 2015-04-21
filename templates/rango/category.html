@@ -16,11 +16,13 @@
 			</form>
 
 			<div class="page-header"><h1>{{ category_name }}</h1></div>
+			<button id="likes" data-catid="{{ category.id }}" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-thumbs-up"></span>Like</button>
 		{% endif %}
 	{% if category %}
 
 
 		{% if category %}
+			<div id="like_count">{{ category.likes }}</div>
 			{% if pages %}
 				<ul>
 					{% for page in pages %}
@@ -30,6 +32,7 @@
 			{% else %}
 				<strong>No pages currently in category.</strong>	
 			{% endif %}
+
 		{% else %}
 			The specified category {{ category.name }} does not exist!
 		{% endif %}

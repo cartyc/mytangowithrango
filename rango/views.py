@@ -284,3 +284,22 @@ def profile(request):
 		context = {}
 
 	return render( request, 'rango/profile.html', context)
+
+@login_required
+def like_category(request):
+
+	cat_id = None
+	if request.method == "GET":
+		print "GET"
+		categoryid = request.GET['category_id']
+
+	likes = 0
+	if categoryid:
+		print "catid"
+		cat = Category.objects.get(id=int(categoryid))
+		if cat:
+			likes = cat.likes + 1
+			cat.likes = likes
+			cat.save()
+
+	return HttpResponse(likes)
